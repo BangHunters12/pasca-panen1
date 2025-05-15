@@ -11,7 +11,7 @@ class ProdukController extends Controller
         $produk = Produk::all();
 
         $kategori = ['beras', 'pupuk', 'obat-obatan']; // enum manual
-        return view('admin.produk', compact('produk', 'kategori'));
+        return view('admin.produksi.produk', compact('produk', 'kategori'));
     }
 
     public function store(Request $request)

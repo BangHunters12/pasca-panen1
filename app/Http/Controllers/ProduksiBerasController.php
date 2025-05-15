@@ -13,7 +13,7 @@ class ProduksiBerasController extends Controller
         $produksi = ProduksiBeras::with('padi')->get(); // Hapus relasi 'produk'
         $padi = Padi::all();
 ;
-        return view('admin.produksi_beras', compact('produksi', 'padi'));
+        return view('admin.produksi.beras', compact('produksi', 'padi'));
     }
 
     public function store(Request $request)

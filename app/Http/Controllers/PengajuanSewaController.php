@@ -15,7 +15,7 @@ class PengajuanSewaController extends Controller
         $petani = Petani::all();
         $jenisSewa = JenisSewa::all();
 
-        return view('admin.pengajuan_sewa', compact('pengajuan', 'petani', 'jenisSewa'));
+        return view('admin.penyewaan.index', compact('pengajuan', 'petani', 'jenisSewa'));
     }
 
     public function store(Request $request)

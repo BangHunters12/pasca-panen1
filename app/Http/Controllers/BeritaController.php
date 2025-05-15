@@ -34,18 +34,18 @@ class BeritaController extends Controller
             'isi' => 'required',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-    
+
         $gambar = null;
         if ($request->hasFile('gambar')) {
             $gambar = $request->file('gambar')->store('gambar_berita', 'public');
         }
-    
+
         Berita::create([
             'judul' => $request->judul,
             'isi' => $request->isi,
             'gambar' => $gambar,
         ]);
-    
+
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil ditambahkan');
     }
 
@@ -76,24 +76,24 @@ class BeritaController extends Controller
             'isi' => 'required',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-    
+
         $berita = Berita::findOrFail($id);
-    
+
         if ($request->hasFile('gambar')) {
             if ($berita->gambar && file_exists(storage_path('app/public/gambar_berita/' . $berita->gambar))) {
                 unlink(storage_path('app/public/gambar_berita/' . $berita->gambar));
             }
-    
+
             $gambarPath = $request->file('gambar')->store('gambar_berita', 'public');
             $berita->gambar = $gambarPath;
         }
-    
+
         $berita->update([
             'judul' => $request->judul,
             'isi' => $request->isi,
             'gambar' => $berita->gambar,
         ]);
-    
+
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil diperbarui!');
     }
 
