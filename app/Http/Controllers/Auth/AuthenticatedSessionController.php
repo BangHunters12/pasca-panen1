@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Controllers\Controller;
+use App\Models\Petani;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
+use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
      */
-    public function create(): Response
+    public function create(): View
     {
-        return Inertia::render('Auth/Login', [
-            'canResetPassword' => Route::has('password.request'),
-            'status' => session('status'),
-        ]);
+        return view('auth.login');
     }
 
     /**
@@ -29,11 +29,30 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $request->validate([
+        'nama_lengkap' => ['required', 'string', 'max:255'],
+        'username'     => ['required', 'string', 'max:255', 'unique:petani'],
+        'gender'       => ['required', 'in:Laki-laki,Perempuan'],
+        'email'        => ['required', 'string', 'email', 'max:255', 'unique:petani'],
+        'no_telp'      => ['required', 'string', 'max:15'],
+        'alamat'       => ['required', 'string'],
+        'password'     => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
 
-        $request->session()->regenerate();
+    $petani = Petani::create([
+        'nama_lengkap' => $request->nama_lengkap,
+        'username'     => $request->username,
+        'gender'       => $request->gender,
+        'email'        => $request->email,
+        'no_telp'      => $request->no_telp,
+        'alamat'       => $request->alamat,
+        'password'     => Hash::make($request->password),
+        'role'         => 'petani',
+    ]);
 
-        return redirect()->intended(route('dashboard', absolute: false));
+    Auth::login($petani);
+
+    return redirect(RouteServiceProvider::HOME);
     }
 
     /**
