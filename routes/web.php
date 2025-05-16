@@ -22,19 +22,19 @@ Route::get('/berita/{id}', [HomeController::class, 'show'])->name('berita.show')
 // ===========================
 // Auth Redirect (role-based)
 // ===========================
-Route::get('/redirect', function () {
-    if (!auth()->check()) {
-        return redirect()->route('login');
-    }
+// Route::get('/redirect', function () {
+//     if (!auth()->check()) {
+//         return redirect()->route('login');
+//     }
 
-    $user = auth()->user();
+//     $user = auth()->user();
 
-    return match ($user->role) {
-        'admin' => redirect()->route('admin.dashboard'),
-        'petani' => redirect()->route('petani.dashboard'),
-        default => abort(403),
-    };
-})->middleware('auth')->name('redirect');
+//     return match ($user->role) {
+//         'admin' => redirect()->route('admin.dashboard'),
+//         'petani' => redirect()->route('petani.dashboard'),
+//         default => abort(403),
+//     };
+// })->middleware('auth')->name('redirect');
 
 // ===========================
 // Admin Routes
@@ -50,11 +50,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
 // Petani Routes
 // ===========================
 Route::prefix('petani')->middleware(['auth', 'role:petani'])->name('petani.')->group(function () {
-    Route::get('/dashboard', fn () => view('petani.dashboard'))->name('dashboard');
+    // Route::get('/dashboard', fn () => view('petani.dashboard'))->name('dashboard');
 
     // Penjualan Padi
-    Route::get('/penjualan-padi', [PengajuanPadiController::class, 'penjualanView'])->name('penjualan_padi.index');
-
+//  Route::get('/penjualan-padi', [PengajuanPadiController::class, 'info'])->name('user.penjualan_padi.penjualanpadi');
+    Route::get('/penjualan-padi', [PengajuanPadiController::class, 'penjualanView'])->name('user.penjualan_padi.penjualanpadi');
     // Pengajuan Sewa
     Route::get('/pengajuan-sewa', [PengajuanSewaController::class, 'index'])->name('pengajuan_sewa.index');
     Route::post('/pengajuan-sewa', [PengajuanSewaController::class, 'store'])->name('pengajuan_sewa.store');
