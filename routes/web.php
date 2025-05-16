@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +13,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
+Route::group(['prefix'=>'admin'],function(){
+
+    Route::prefix('berita')->group(function () {
+        route::get('/',[NewsController::class,'index'])->name('admin.berita.index');
+        
+    });
+
+
+});
 
 
 Route::middleware('auth')->group(function () {

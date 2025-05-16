@@ -7,18 +7,21 @@ use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
-    function index(){
+    function index()
+    {
         $NewsData = News::all();
-        return view('admin.berita.index',[
-            'beritas'=>$NewsData
+        return view('admin.berita.index', [
+            'beritas' => $NewsData
         ]);
     }
 
-    function create(){
+    function create()
+    {
         return view('admin.berita.create');
     }
 
-    function store(Request $request){
+    function store(Request $request)
+    {
         $request->validate([
             'judul' => 'required',
             'isi' => 'required',
@@ -39,4 +42,16 @@ class NewsController extends Controller
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil ditambahkan');
     }
 
+    function destroy(string $id)
+    {
+        $NewsData = News::findOrFail($id);
+        if ($NewsData->gambar && file_exists(storage_path(
+            'app/public/gambar+berita'
+        ))) {
+            unlink(storage_path('app/public/gambar_berita/' . $NewsData->gambar));
+        }
+        $NewsData->delete();
+
+        return redirect()->route('admin.berita.index');
+    }
 }
