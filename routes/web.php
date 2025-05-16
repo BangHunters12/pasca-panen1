@@ -21,6 +21,7 @@ use App\Http\Controllers\{
 Route::get('/', [HomeController::class, 'index'])->name('beranda');
 Route::get('/berita/{id}', [HomeController::class, 'show'])->name('berita.show');
 
+
 // ===========================
 // Auth Redirect (role-based)
 // ===========================
@@ -56,7 +57,7 @@ Route::prefix('petani')->middleware(['auth', 'role:petani'])->name('petani.')->g
 
     // Penjualan Padi
 //  Route::get('/penjualan-padi', [PengajuanPadiController::class, 'info'])->name('user.penjualan_padi.penjualanpadi');
-    Route::get('/penjualan-padi', [PengajuanPadiController::class, 'penjualanView'])->name('user.penjualan_padi.penjualanpadi');
+    Route::get('/penjualan-padi', [PengajuanPadiController::class, 'penjualanView'])->name('user.penjualan_padi');
 
 
     // Pengajuan Sewa
@@ -79,3 +80,5 @@ Route::prefix('petani')->middleware(['auth', 'role:petani'])->name('petani.')->g
     Route::put('/produksi-beras/{id}', [ProduksiBerasController::class, 'update'])->name('produksi_beras.update');
     Route::delete('/produksi-beras/{id}', [ProduksiBerasController::class, 'destroy'])->name('produksi_beras.destroy');
 });
+
+require __DIR__.'/auth.php';
